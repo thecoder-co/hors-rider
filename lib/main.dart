@@ -1,22 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rider/loading.dart';
+import 'package:rider/loading.dart' as load;
 import 'package:rider/logic/auth_state.dart';
-import 'package:rider/screens/Login/login_screen.dart';
-import 'package:rider/screens/Signup/signup_screen.dart';
-import 'package:rider/screens/Welcome/welcome_screen.dart';
-import 'package:rider/screens/logged_in/home.dart';
+import 'package:rider/screens/login/login_screen.dart';
+import 'package:rider/screens/signup/signup_screen.dart';
+import 'package:rider/screens/client/home.dart';
+import 'package:authentication_provider/authentication_controller.dart';
+import 'package:authentication_provider/authentication_state.dart' as AuthState;
+import 'package:authentication_provider/authentication_provider.dart';
+import 'package:rider/screens/otp/otp.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => AuthModel(),
-      child: MyApp(),
-    ),
+    MyApp(),
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late AuthenticationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AuthenticationController<AuthModel>(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,45 +37,36 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: AuthenticationProvider(
+          controller: controller,
+          builder: (context) {
+            var state = AuthenticationProvider.of<AuthModel>(context)?.state;
+            if (state is AuthState.Loading) {
+              return load.Loading();
+            } else if (state is AuthState.Unauthenticated) {
+              return LoginScreen();
+            } else if (state is AuthState.Authenticated<AuthModel>) {
+              return Client();
+            }
+            Future.delayed(Duration(seconds: 1), () {
+              controller.initialize();
+            });
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text('Uninitialized'),
+              ),
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }),
       routes: <String, WidgetBuilder>{
         //All available pages
-        '/home': (BuildContext context) => HomeScreen(),
-        '/login': (BuildContext context) => SignUpScreen(),
-        '/signup': (BuildContext context) => LoginScreen(),
-      },
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<AuthModel>(
-      builder: (context, auth, child) {
-        return FutureBuilder(
-          future: auth.isLoggedIn,
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data == true) {
-                return HomeScreen();
-              } else {
-                return WelcomeScreen();
-              }
-            } else {
-              return Loading();
-            }
-          },
-        );
+        '/home': (BuildContext context) => Client(),
+        '/login': (BuildContext context) => LoginScreen(),
+        '/signup': (BuildContext context) =>
+            SignUpScreen(authController: controller),
+        '/otp': (BuildContext context) => OTP(),
       },
     );
   }
