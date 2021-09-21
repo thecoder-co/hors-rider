@@ -14,7 +14,7 @@ class Background extends StatelessWidget {
       width: double.infinity,
       height: size.height,
       child: Stack(
-        alignment: Alignment.center,
+        alignment: Alignment.topCenter,
         children: <Widget>[
           Positioned(
             top: 0,
@@ -32,7 +32,10 @@ class Background extends StatelessWidget {
               width: size.width * 0.4,
             ),
           ),
-          child!,
+          Padding(
+            padding: const EdgeInsets.only(top: 50),
+            child: child!,
+          ),
         ],
       ),
     );

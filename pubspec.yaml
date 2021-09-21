@@ -21,14 +21,16 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  authentication_provider: ^1.0.1
   cupertino_icons: ^1.0.2
+  device_info_plus: ^2.1.0
   flutter:
     sdk: flutter
-  flutter_svg: ^0.22.0
+  google_fonts: ^2.1.0
+  http: ^0.13.3
   otp_text_field: ^1.1.1
   provider: ^6.0.0
   shared_preferences: ^2.0.7
+  simple_shadow: ^0.2.0
 
 dev_dependencies:
   flutter_test:
