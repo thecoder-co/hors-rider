@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
 import 'package:rider/domain/user.dart';
 import 'package:rider/logic/providers/auth.dart';
 import 'package:rider/logic/providers/user_provider.dart';
@@ -9,18 +9,18 @@ import 'package:rider/components/rounded_button.dart';
 import 'package:rider/components/rounded_input_field.dart';
 import 'package:rider/components/rounded_password_field.dart';
 import 'package:rider/util/validators.dart';
+import 'package:get/get.dart';
 
 class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AuthProvider auth = Provider.of<AuthProvider>(context);
     Size size = MediaQuery.of(context).size;
     String? surname = '';
     String? firstName = '';
     String? email = '';
-    String? phoneNumber = '';
+    String? phone = '';
     String? address = '';
-    String? deviceName = '';
+    //String? deviceName = '';
     String? password = '';
     String? passwordConfirmation = '';
     return Background(
@@ -60,7 +60,7 @@ class Body extends StatelessWidget {
               hintText: "Phone Number",
               icon: Icons.phone,
               onChanged: (value) {
-                phoneNumber = value;
+                phone = value;
               },
             ),
             RoundedInputField(
@@ -88,20 +88,19 @@ class Body extends StatelessWidget {
                 String? val = validateEmail(email!);
                 if (val == null) {
                   final Future<Map<String, dynamic>> successfulMessage =
-                      auth.register(
+                      AuthProvider().register(
                     address: address,
                     email: email,
                     firstName: firstName,
                     password: password,
                     passwordConfirmation: passwordConfirmation,
-                    phoneNumber: phoneNumber,
+                    phone: phone,
                     surname: surname,
                   );
                   successfulMessage.then((response) {
                     if (response['status']) {
                       User user = response['user'];
-                      Provider.of<UserProvider>(context, listen: false)
-                          .setUser(user);
+                      UserProvider().setUser(user);
                       Navigator.pushReplacementNamed(context, '/home');
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(

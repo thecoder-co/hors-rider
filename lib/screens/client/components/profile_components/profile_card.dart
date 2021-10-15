@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rider/constants.dart';
+import 'package:rider/screens/client/components/profile_components/about.dart';
+import 'package:rider/screens/client/components/profile_components/help.dart';
+import 'package:rider/screens/client/components/wallet_components/fund_wallet_page.dart';
 import 'package:simple_shadow/simple_shadow.dart';
 
 class ProfileCard extends StatelessWidget {
@@ -14,6 +18,7 @@ class ProfileCard extends StatelessWidget {
       offset: Offset(3, 3), // Default: Offset(2, 2)
       sigma: 7,
       child: Card(
+        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
@@ -32,8 +37,11 @@ class ProfileCard extends StatelessWidget {
                   ),
                   title: Text(
                     'Messages',
-                    style: TextStyle(
-                      color: Colors.grey[700],
+                    style: GoogleFonts.getFont(
+                      'Overlock',
+                      textStyle: TextStyle(
+                        color: Colors.grey[700],
+                      ),
                     ),
                   ),
                   trailing: Icon(
@@ -54,15 +62,25 @@ class ProfileCard extends StatelessWidget {
                 alignment: Alignment.center,
                 height: 60,
                 child: ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FundWalletPage(),
+                      ),
+                    );
+                  },
                   leading: Icon(
                     Icons.money_rounded,
                     color: kPrimaryColor,
                   ),
                   title: Text(
                     'Fund',
-                    style: TextStyle(
-                      color: Colors.grey[700],
+                    style: GoogleFonts.getFont(
+                      'Overlock',
+                      textStyle: TextStyle(
+                        color: Colors.grey[700],
+                      ),
                     ),
                   ),
                   trailing: Icon(
@@ -83,15 +101,25 @@ class ProfileCard extends StatelessWidget {
                 height: 60,
                 alignment: Alignment.center,
                 child: ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Help(),
+                      ),
+                    );
+                  },
                   leading: Icon(
                     Icons.help_outline,
                     color: kPrimaryColor,
                   ),
                   title: Text(
                     'Help',
-                    style: TextStyle(
-                      color: Colors.grey[700],
+                    style: GoogleFonts.getFont(
+                      'Overlock',
+                      textStyle: TextStyle(
+                        color: Colors.grey[700],
+                      ),
                     ),
                   ),
                   trailing: Icon(
@@ -112,15 +140,25 @@ class ProfileCard extends StatelessWidget {
                 alignment: Alignment.center,
                 height: 60,
                 child: ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => About(),
+                      ),
+                    );
+                  },
                   leading: Icon(
                     Icons.info_outline,
                     color: kPrimaryColor,
                   ),
                   title: Text(
                     'About',
-                    style: TextStyle(
-                      color: Colors.grey[700],
+                    style: GoogleFonts.getFont(
+                      'Overlock',
+                      textStyle: TextStyle(
+                        color: Colors.grey[700],
+                      ),
                     ),
                   ),
                   trailing: Icon(

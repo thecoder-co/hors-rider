@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rider/constants.dart';
 import 'package:rider/screens/client/components/profile_components/full_profile.dart';
+import 'package:rider/util/app_url.dart';
 import 'package:simple_shadow/simple_shadow.dart';
 
 class AccountTile extends StatelessWidget {
@@ -11,7 +13,7 @@ class AccountTile extends StatelessWidget {
 
   final String? firstName;
   final String? lastName;
-  final String? phoneNumber;
+  final String? phone;
   final String? address;
   final String? gender;
   final String? maritalStatus;
@@ -25,7 +27,7 @@ class AccountTile extends StatelessWidget {
     this.number,
     this.firstName,
     this.lastName,
-    this.phoneNumber,
+    this.phone,
     this.address,
     this.gender,
     this.maritalStatus,
@@ -42,6 +44,7 @@ class AccountTile extends StatelessWidget {
       offset: Offset(3, 3), // Default: Offset(2, 2)
       sigma: 7,
       child: Card(
+        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
@@ -53,7 +56,7 @@ class AccountTile extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => FullProfile(
-                    firstName: 'Idunnuoluwa',
+                    firstName: firstName,
                     accountStatus: accountStatus,
                     address: address,
                     email: email,
@@ -61,7 +64,7 @@ class AccountTile extends StatelessWidget {
                     image: image,
                     lastName: lastName,
                     maritalStatus: maritalStatus,
-                    phoneNumber: phoneNumber,
+                    phone: phone,
                     walletBalance: walletBalance,
                   ),
                 ),
@@ -82,16 +85,19 @@ class AccountTile extends StatelessWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: image != null
-                            ? CircleAvatar(
-                                child: Image.network(image!),
-                                radius: 35,
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                  AppUrl.baseURL + image!,
+                                  fit: BoxFit.cover,
+                                ),
                               )
                             : CircleAvatar(
                                 backgroundColor:
                                     Color.fromRGBO(198, 239, 251, 1),
                                 radius: 35,
                                 child: Icon(
-                                  Icons.person_outline,
+                                  Icons.person_outline_rounded,
                                   color: kPrimaryColor,
                                   size: 45,
                                 ),
@@ -104,17 +110,29 @@ class AccountTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '$name',
-                            style: TextStyle(fontSize: 18),
+                          Flexible(
+                            child: Text(
+                              '$name',
+                              style: GoogleFonts.getFont(
+                                'Overlock',
+                                textStyle: TextStyle(
+                                  fontSize: 18,
+                                  color: kDarkGreen,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                           ),
                           SizedBox(
                             height: 5,
                           ),
                           Text(
-                            '$number',
-                            style: TextStyle(
-                              color: Colors.grey[700],
+                            '$phone',
+                            style: GoogleFonts.getFont(
+                              'Overlock',
+                              textStyle: TextStyle(
+                                color: Colors.grey[700],
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -122,8 +140,11 @@ class AccountTile extends StatelessWidget {
                           ),
                           Text(
                             '$email',
-                            style: TextStyle(
-                              color: Colors.grey[700],
+                            style: GoogleFonts.getFont(
+                              'Overlock',
+                              textStyle: TextStyle(
+                                color: Colors.grey[700],
+                              ),
                             ),
                           ),
                         ],

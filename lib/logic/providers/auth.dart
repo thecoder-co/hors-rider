@@ -1,8 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:rider/domain/user.dart';
 import 'package:rider/util/app_url.dart';
@@ -20,7 +17,7 @@ enum Status {
   LoggedOut
 }
 
-class AuthProvider with ChangeNotifier {
+class AuthProvider {
   Status _loggedInStatus = Status.NotLoggedIn;
   Status _registeredInStatus = Status.NotRegistered;
 
@@ -51,7 +48,6 @@ class AuthProvider with ChangeNotifier {
     };
 
     _loggedInStatus = Status.Authenticating;
-    notifyListeners();
 
     Response response = await post(
       Uri.parse(AppUrl.login),
@@ -75,12 +71,11 @@ class AuthProvider with ChangeNotifier {
         UserPreferences().saveUser(authUser);
 
         _loggedInStatus = Status.LoggedIn;
-        notifyListeners();
 
         result = {'status': true, 'message': 'Successful', 'user': authUser};
       } else {
         _loggedInStatus = Status.NotLoggedIn;
-        notifyListeners();
+
         result = {
           'status': false,
           'message': json.decode(response.body)['message']
@@ -88,7 +83,7 @@ class AuthProvider with ChangeNotifier {
       }
     } else {
       _loggedInStatus = Status.NotLoggedIn;
-      notifyListeners();
+
       result = {
         'status': false,
         'message': json.decode(response.body)['message']
@@ -103,7 +98,7 @@ class AuthProvider with ChangeNotifier {
       String? passwordConfirmation,
       String? surname,
       String? firstName,
-      String? phoneNumber,
+      String? phone,
       String? address}) async {
     var result;
     String device = await getdev();
@@ -111,7 +106,7 @@ class AuthProvider with ChangeNotifier {
       'surname': surname,
       'first_name': firstName,
       'email': email,
-      'phone_number': phoneNumber,
+      'phone_number': phone,
       'address': address,
       'device_name': device,
       'password': password,
@@ -119,7 +114,6 @@ class AuthProvider with ChangeNotifier {
     };
 
     _loggedInStatus = Status.Authenticating;
-    notifyListeners();
 
     Response response = await post(
       Uri.parse(AppUrl.register),
@@ -142,12 +136,11 @@ class AuthProvider with ChangeNotifier {
         UserPreferences().saveUser(authUser);
 
         _loggedInStatus = Status.LoggedIn;
-        notifyListeners();
 
         result = {'status': true, 'message': 'Successful', 'user': authUser};
       } else {
         _loggedInStatus = Status.NotLoggedIn;
-        notifyListeners();
+
         result = {
           'status': false,
           'message': json.decode(response.body)['message']
@@ -155,7 +148,7 @@ class AuthProvider with ChangeNotifier {
       }
     } else {
       _loggedInStatus = Status.NotLoggedIn;
-      notifyListeners();
+
       result = {
         'status': false,
         'message': json.decode(response.body)['message']
@@ -167,6 +160,5 @@ class AuthProvider with ChangeNotifier {
   void logout() async {
     _loggedInStatus = Status.NotLoggedIn;
     UserPreferences().removeUser();
-    notifyListeners();
   }
 }

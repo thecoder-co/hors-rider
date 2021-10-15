@@ -3,12 +3,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
 class UserPreferences {
-  Future<bool> saveUser(User user) async {
+  void saveUser(User user) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     prefs.setString("email", user.email!);
     prefs.setString("token", user.token!);
-    return prefs.commit();
   }
 
   Future<User> getUser() async {

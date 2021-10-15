@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rider/constants.dart';
 
 class RoundedButton extends StatelessWidget {
@@ -29,7 +30,7 @@ class RoundedButton extends StatelessWidget {
           },
           child: Text(
             text!,
-            style: TextStyle(color: textColor),
+            style: GoogleFonts.getFont('Overlock', textStyle:  TextStyle(color: textColor),)
           ),
         ),
       ),

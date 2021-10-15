@@ -1,7 +1,7 @@
 import requests as re
 import json as js
 
-token = 'Bearer 30|61CDC2iCRZawrMGBmlVMIJv3Zmlc5vbyT7WUjNNB'
+token = 'Bearer 77|T6FVUZ8slJksiGAvYyw6hdoHgD4azu3zSLged6SM'
 
 baseurl = 'https://app.johors.com'
 def login():
@@ -10,14 +10,15 @@ def login():
     payload={
             'user_type':0,
             'device_name':'android emulator',
-            'password':'12345678',
-            'email':'abimbsthefirst@gmail.com'
+            'password':'123457890',
+            'email':'thecoder.co@gmail.com'
             }
     headers = {}
 
     response = re.post(url, headers=headers, data=payload)
 
     print(response.text)
+    print(response.status_code)
     return response.json
 
 def register():
@@ -108,7 +109,7 @@ def reset_password():
     print(response.text)
 
 def profile_details():
-    url = "https://app.johors.com/api/mobile/profile-details"
+    url = "http://127.0.0.1:5000/api/mobile/profile-details"
     headers = {
         'Content-type':'application/json',
         'Accept':'application/json',
@@ -119,5 +120,32 @@ def profile_details():
 
     print(response.text)
 
+def fund_wallet():
+    url = "/api/mobile/client/fund-wallet"
+    headers = {
+        'Content-type':'application/json',
+        'Accept':'application/json',
+        'Authorization':token
+    }
+    payload = {'amount':1000,'payment_type':0}
 
-profile_details()
+    response = re.request("POST", baseurl+url, headers=headers, data=js.dumps(payload))
+
+    print(response.text)
+
+
+def deposit_history():
+    url = "/api/mobile/client/deposit-history/"
+
+    headers = {
+        'Content-type':'application/json',
+        'Accept':'application/json',
+        'Authorization':token
+    }
+
+    response = re.request("POST", baseurl+url, headers=headers)
+    print(response.text)
+
+
+
+deposit_history()

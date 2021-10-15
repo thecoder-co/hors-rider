@@ -1,12 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class AppIndex with ChangeNotifier {
-  int _selectedIndex = 1;
-
-  set changeIndex(int index) {
-    _selectedIndex = index;
-    notifyListeners();
+class AppIndex extends GetxController {
+  var selectedIndex = 1.obs;
+  void changeTabIndex(int index) {
+    selectedIndex.value = index;
+    update();
   }
-
-  get currentIndex => _selectedIndex;
 }

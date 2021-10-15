@@ -1,13 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:rider/domain/user.dart';
+import 'package:rider/util/shared_preference.dart';
 
-class UserProvider with ChangeNotifier {
+class UserProvider {
   User _user = new User();
 
   User get user => _user;
 
   void setUser(User user) {
     _user = user;
-    notifyListeners();
+    UserPreferences().saveUser(user);
   }
 }
