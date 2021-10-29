@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.rider">
+	<uses-permission android:name="android.permission.INTERNET" />
 	<application android:label="rider" android:icon="@mipmap/ic_launcher">
 		<activity android:name=".MainActivity" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
 			<!--
@@ -26,6 +27,6 @@
 		This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
 		-->
 		<meta-data android:name="flutterEmbedding" android:value="2" />
-		<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyAX6XvI1txGzBbbkl73YsH1JfcbgI41C4g" />
+		<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBcNIqkYa-XqjQJiTtQTXSTWo_GT4n3WKE" />
 	</application>
 </manifest>

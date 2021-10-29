@@ -33,6 +33,9 @@ dependencies:
   otp_text_field: ^1.1.1
   shared_preferences: ^2.0.7
   simple_shadow: ^0.2.0
+  dio:
+  datetime_picker_formfield:
+  select_form_field:
   flutter_polyline_points: ^1.0.0
   place_picker: ^0.9.19-nullsafety
   google_maps_place_picker: ^2.1.0-nullsafety.3

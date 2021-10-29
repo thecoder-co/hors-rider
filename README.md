@@ -1,3 +1,3 @@
 # rider
 
-dispatch rider app
+Courier delivery app.
