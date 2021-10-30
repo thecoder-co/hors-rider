@@ -4,8 +4,34 @@ import 'package:rider/util/app_url.dart';
 import 'package:rider/util/shared_preference.dart';
 import 'dart:convert';
 
-Future<ClientBookings> getBookings({String? amount}) async {
-  Uri url = Uri.parse(AppUrl.getClientBookings);
+Future<ClientBookings> getFullBookings() async {
+  ClientBookings data = await getBookings();
+  bool next = false;
+  String? url;
+  ClientBookings? newData;
+  if (data.data!.nextPageUrl != null) {
+    next = true;
+    url = data.data!.nextPageUrl;
+  }
+  print(data.data!.bookings);
+
+  while (next) {
+    newData = await getBookings(newurl: url);
+    if (newData.data!.nextPageUrl != null) {
+      next = true;
+      url = newData.data!.nextPageUrl;
+    } else {
+      next = false;
+    }
+    print(newData.data!.bookings);
+    data.data!.bookings!.addAll(newData.data!.bookings!);
+  }
+  return data;
+}
+
+Future<ClientBookings> getBookings({String? newurl}) async {
+  print(newurl ?? AppUrl.getClientBookings);
+  Uri url = Uri.parse(newurl ?? AppUrl.getClientBookings);
   User user = await UserPreferences().getUser();
   String token = user.token!;
 
@@ -18,7 +44,6 @@ Future<ClientBookings> getBookings({String? amount}) async {
     },
   );
   if (response.statusCode == 200) {
-    print(response.body);
     return getClientBookingsFromJson(response.body);
   } else {
     throw Exception('Unable to load data');

@@ -29,4 +29,8 @@ class AppUrl {
       baseURL + "/api/mobile/verify-otp-for-forget-pass";
 
   static const String resetPassword = baseURL + "/api/mobile/reset-password";
+  static const String processBooking =
+      baseURL + "/api/mobile/client/proccess-booking";
+  static const String finishBooking =
+      baseURL + "/api/mobile/client/finish-booking";
 }

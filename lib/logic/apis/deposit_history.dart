@@ -4,6 +4,31 @@ import 'package:rider/util/app_url.dart';
 import 'package:rider/util/shared_preference.dart';
 import 'dart:convert';
 
+Future<DepositHistory> getFullDeposits() async {
+  DepositHistory data = await getDepositHistory();
+  bool next = false;
+  String? url;
+  DepositHistory? newData;
+  if (data.data!.nextPageUrl != null) {
+    next = true;
+    url = data.data!.nextPageUrl;
+  }
+  print(data.data!.deposits);
+
+  while (next) {
+    newData = await getDepositHistory(nextUrl: url);
+    if (newData.data!.nextPageUrl != null) {
+      next = true;
+      url = newData.data!.nextPageUrl;
+    } else {
+      next = false;
+    }
+    print(newData.data!.deposits);
+    data.data!.deposits!.addAll(newData.data!.deposits!);
+  }
+  return data;
+}
+
 Future<DepositHistory> getDepositHistory({String? nextUrl}) async {
   Uri url = Uri.parse(nextUrl ?? AppUrl.depositHistory);
   User user = await UserPreferences().getUser();

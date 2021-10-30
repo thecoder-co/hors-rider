@@ -18,7 +18,7 @@ class _HistoryState extends State<History> {
   @override
   void initState() {
     super.initState();
-    data = getBookings();
+    data = getFullBookings();
   }
 
   @override
