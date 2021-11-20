@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "378862366756",
+    "firebase_url": "https://hois-326508-default-rtdb.firebaseio.com",
+    "project_id": "hois-326508",
+    "storage_bucket": "hois-326508.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:378862366756:android:a9be49d1e873a0c49028b1",
+        "android_client_info": {
+          "package_name": "com.hors.delivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "378862366756-0a5cvv30q8ohoiji4vek30c25g1pttrn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjrwBkmaQ33aCPqIzw9YQ-ZgZ4pKa3wzE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "378862366756-0a5cvv30q8ohoiji4vek30c25g1pttrn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
