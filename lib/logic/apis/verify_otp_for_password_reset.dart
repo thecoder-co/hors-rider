@@ -1,4 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:rider/constants.dart';
 import 'package:rider/util/app_url.dart';
 import 'dart:convert';
 
@@ -7,7 +11,19 @@ Future<VerifyOtp> verifyOtpForPasswordReset({
   required String? email,
 }) async {
   Uri url = Uri.parse(AppUrl.verifyOtpForPasswordReset);
-
+  Get.defaultDialog(
+    content: CircularProgressIndicator(),
+    radius: 10,
+    title: 'Loading',
+    titleStyle: GoogleFonts.getFont(
+      'Overlock',
+      textStyle: TextStyle(
+        fontSize: 16,
+        color: kDarkGreen,
+        fontWeight: FontWeight.w900,
+      ),
+    ),
+  );
   http.Response response = await http.post(
     url,
     headers: {
@@ -21,6 +37,7 @@ Future<VerifyOtp> verifyOtpForPasswordReset({
       },
     ),
   );
+  Get.back();
   if (response.statusCode == 200) {
     return verifyOtpFromJson(response.body);
   } else {

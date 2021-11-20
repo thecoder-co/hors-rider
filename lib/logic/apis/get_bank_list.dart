@@ -1,11 +1,11 @@
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:rider/domain/user.dart';
 import 'package:rider/util/app_url.dart';
 import 'package:rider/util/shared_preference.dart';
+import 'dart:convert';
 
-Future<String?> getWalletBalance() async {
-  Uri url = Uri.parse(AppUrl.profileDetails);
+Future<BankList> getBankList() async {
+  Uri url = Uri.parse(AppUrl.getBankList);
   User user = await UserPreferences().getUser();
   String token = user.token!;
 
@@ -18,20 +18,18 @@ Future<String?> getWalletBalance() async {
     },
   );
   if (response.statusCode == 200) {
-    WalletBalance wallet = walletBalanceFromJson(response.body);
-    return wallet.data!.walletBalance;
+    return bankListFromJson(response.body);
   } else {
     throw Exception('Unable to load data');
   }
 }
 
-WalletBalance walletBalanceFromJson(String str) =>
-    WalletBalance.fromJson(json.decode(str));
+BankList bankListFromJson(String str) => BankList.fromJson(json.decode(str));
 
-String walletBalanceToJson(WalletBalance data) => json.encode(data.toJson());
+String bankListToJson(BankList data) => json.encode(data.toJson());
 
-class WalletBalance {
-  WalletBalance({
+class BankList {
+  BankList({
     this.status,
     this.code,
     this.message,
@@ -42,14 +40,14 @@ class WalletBalance {
   bool? status;
   int? code;
   String? message;
-  Data? data;
+  List<Datum>? data;
   int? timestamps;
 
-  factory WalletBalance.fromJson(Map<String, dynamic> json) => WalletBalance(
+  factory BankList.fromJson(Map<String, dynamic> json) => BankList(
         status: json["status"],
         code: json["code"],
         message: json["message"],
-        data: Data.fromJson(json["data"]),
+        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
         timestamps: json["timestamps"],
       );
 
@@ -57,23 +55,31 @@ class WalletBalance {
         "status": status,
         "code": code,
         "message": message,
-        "data": data!.toJson(),
+        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
         "timestamps": timestamps,
       };
 }
 
-class Data {
-  Data({
-    this.walletBalance,
+class Datum {
+  Datum({
+    this.id,
+    this.name,
+    this.code,
   });
 
-  String? walletBalance;
+  String? id;
+  String? name;
+  String? code;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        walletBalance: json["wallet_balance"],
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+        id: json["id"],
+        name: json["name"],
+        code: json["code"],
       );
 
   Map<String, dynamic> toJson() => {
-        "wallet_balance": walletBalance,
+        "id": id,
+        "name": name,
+        "code": code,
       };
 }

@@ -13,7 +13,6 @@ Future<DepositHistory> getFullDeposits() async {
     next = true;
     url = data.data!.nextPageUrl;
   }
-  print(data.data!.deposits);
 
   while (next) {
     newData = await getDepositHistory(nextUrl: url);
@@ -23,7 +22,7 @@ Future<DepositHistory> getFullDeposits() async {
     } else {
       next = false;
     }
-    print(newData.data!.deposits);
+
     data.data!.deposits!.addAll(newData.data!.deposits!);
   }
   return data;
@@ -43,7 +42,6 @@ Future<DepositHistory> getDepositHistory({String? nextUrl}) async {
     },
   );
   if (response.statusCode == 200) {
-    print(response.body);
     return depositHistoryFromJson(response.body);
   } else {
     throw Exception('Unable to load data');

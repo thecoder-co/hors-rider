@@ -1,4 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:rider/constants.dart';
 import 'package:rider/domain/user.dart';
 import 'package:rider/util/app_url.dart';
 import 'package:rider/util/shared_preference.dart';
@@ -14,7 +18,19 @@ Future<UpdateProfile> updateProfile({
   Uri url = Uri.parse(AppUrl.updateProfile);
   User user = await UserPreferences().getUser();
   String token = user.token!;
-
+  Get.defaultDialog(
+    content: CircularProgressIndicator(),
+    radius: 10,
+    title: 'Loading',
+    titleStyle: GoogleFonts.getFont(
+      'Overlock',
+      textStyle: TextStyle(
+        fontSize: 16,
+        color: kDarkGreen,
+        fontWeight: FontWeight.w900,
+      ),
+    ),
+  );
   http.Response response = await http.post(
     url,
     headers: {
@@ -33,7 +49,6 @@ Future<UpdateProfile> updateProfile({
     ),
   );
   if (response.statusCode == 200) {
-    print(response.body);
     return updateProfileFromJson(response.body);
   } else {
     throw Exception('Unable to load data');

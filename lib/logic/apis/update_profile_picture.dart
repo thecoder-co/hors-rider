@@ -1,4 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:rider/constants.dart';
 import 'package:rider/domain/user.dart';
 import 'package:rider/util/app_url.dart';
 import 'package:rider/util/shared_preference.dart';
@@ -8,7 +12,19 @@ Future<AddProfilePhoto> updateProfilePicture({String? path}) async {
   Uri url = Uri.parse(AppUrl.addProfilePhoto);
   User user = await UserPreferences().getUser();
   String token = user.token!;
-
+  Get.defaultDialog(
+    content: CircularProgressIndicator(),
+    radius: 10,
+    title: 'Loading',
+    titleStyle: GoogleFonts.getFont(
+      'Overlock',
+      textStyle: TextStyle(
+        fontSize: 16,
+        color: kDarkGreen,
+        fontWeight: FontWeight.w900,
+      ),
+    ),
+  );
   var request = http.MultipartRequest('POST', url);
 
   request.files.add(await http.MultipartFile.fromPath('profile_photo', path!));
@@ -20,10 +36,10 @@ Future<AddProfilePhoto> updateProfilePicture({String? path}) async {
   });
 
   http.StreamedResponse response = await request.send();
-
+  Get.back();
   if (response.statusCode == 200) {
     String data = await response.stream.bytesToString();
-    print(data);
+
     return addProfilePhotoFromJson(data);
   } else {
     throw Exception('Unable to load data');

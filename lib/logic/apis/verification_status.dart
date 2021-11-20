@@ -18,7 +18,6 @@ Future<VerificationStatus> checkVerified() async {
     },
   );
   if (response.statusCode == 200) {
-    print(response.body);
     return verificationStatusFromJson(response.body);
   } else {
     throw Exception('Unable to load data');

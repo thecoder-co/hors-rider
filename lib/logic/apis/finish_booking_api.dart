@@ -1,4 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:rider/constants.dart';
+
 import 'package:rider/domain/user.dart';
 import 'package:rider/util/app_url.dart';
 import 'package:rider/util/shared_preference.dart';
@@ -7,15 +12,30 @@ import 'dart:convert';
 Future<FinishBooking> finishBooking({
   required String? paymentMethod,
   required String? bookingCode,
+  required String? pickupName,
+  required String? pickupPhoneNumber,
+  required String? deliveryName,
+  required String? deliveryPhoneNumber,
   String? imagePath,
 }) async {
-  Uri url = Uri.parse(AppUrl.finishBooking +
-      '?payment_method=$paymentMethod&booking_code=$bookingCode');
-  print(url);
+  Uri url = Uri.parse(AppUrl.finishBooking);
+
   User user = await UserPreferences().getUser();
   String token = user.token!;
-
-  /* var request = http.MultipartRequest('POST', url);
+  Get.defaultDialog(
+    content: CircularProgressIndicator(),
+    radius: 10,
+    title: 'Loading',
+    titleStyle: GoogleFonts.getFont(
+      'Overlock',
+      textStyle: TextStyle(
+        fontSize: 16,
+        color: kDarkGreen,
+        fontWeight: FontWeight.w900,
+      ),
+    ),
+  );
+  var request = http.MultipartRequest('POST', url);
 
   imagePath != null
       ? request.files
@@ -28,16 +48,25 @@ Future<FinishBooking> finishBooking({
     'Authorization': 'Bearer $token'
   });
 
-  http.StreamedResponse response = await request.send();
+  request.fields.addAll({
+    'payment_method': paymentMethod!,
+    'booking_code': bookingCode!,
+    'pickup_name': pickupName!,
+    'pickup_phone_number': pickupPhoneNumber!,
+    'delivery_name': deliveryName!,
+    'delivery_phone_number': deliveryPhoneNumber!,
+  });
 
+  http.StreamedResponse response = await request.send();
+  Get.back();
   if (response.statusCode == 200) {
     String data = await response.stream.bytesToString();
     return finishBookingFromJson(data);
   } else {
     throw Exception('Unable to load data');
-  } */
+  }
 
-  http.Response response = await http.post(
+  /* http.Response response = await http.post(
     url,
     headers: {
       'Content-type': 'application/json',
@@ -46,11 +75,11 @@ Future<FinishBooking> finishBooking({
     },
   );
   if (response.statusCode == 200) {
-    print(response.body);
+    
     return finishBookingFromJson(response.body);
   } else {
     throw Exception('Unable to load data');
-  }
+  } */
 }
 
 FinishBooking finishBookingFromJson(String str) =>

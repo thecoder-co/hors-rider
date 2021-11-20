@@ -25,13 +25,17 @@ class AuthProvider {
   Status get registeredInStatus => _registeredInStatus;
 
   Future<dynamic> getdev() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (Platform.isLinux) {
-      var info = await deviceInfo.linuxInfo;
-      return info.prettyName;
-    } else {
-      var info = await deviceInfo.androidInfo;
-      return info.model;
+    try {
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      if (Platform.isLinux) {
+        var info = await deviceInfo.linuxInfo;
+        return info.prettyName;
+      } else {
+        var info = await deviceInfo.androidInfo;
+        return info.model;
+      }
+    } catch (e) {
+      return 'Google Chrome';
     }
   }
 
@@ -65,7 +69,7 @@ class AuthProvider {
 
       if (status) {
         var userData = responseData['data']['api_token'];
-        print(userData);
+
         User authUser = User.fromJson(responseData: userData, email: email);
 
         UserPreferences().saveUser(authUser);

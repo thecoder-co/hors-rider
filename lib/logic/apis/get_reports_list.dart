@@ -4,32 +4,36 @@ import 'package:rider/util/app_url.dart';
 import 'package:rider/util/shared_preference.dart';
 import 'dart:convert';
 
-Future<ClientBookings> getFullBookings() async {
-  ClientBookings data = await getBookings();
-  bool next = false;
-  String? url;
-  ClientBookings? newData;
-  if (data.data!.nextPageUrl != null) {
-    next = true;
-    url = data.data!.nextPageUrl;
-  }
-
-  while (next) {
-    newData = await getBookings(newurl: url);
-    if (newData.data!.nextPageUrl != null) {
+Future<ClientReports> getFullReports() async {
+  try {
+    ClientReports data = await getReports();
+    bool next = false;
+    String? url;
+    ClientReports? newData;
+    if (data.data!.nextPageUrl != null) {
       next = true;
-      url = newData.data!.nextPageUrl;
-    } else {
-      next = false;
+      url = data.data!.nextPageUrl;
     }
 
-    data.data!.bookings!.addAll(newData.data!.bookings!);
+    while (next) {
+      newData = await getReports(newurl: url);
+      if (newData.data!.nextPageUrl != null) {
+        next = true;
+        url = newData.data!.nextPageUrl;
+      } else {
+        next = false;
+      }
+
+      data.data!.reports!.addAll(newData.data!.reports!);
+    }
+    return data;
+  } catch (e) {
+    throw Exception();
   }
-  return data;
 }
 
-Future<ClientBookings> getBookings({String? newurl}) async {
-  Uri url = Uri.parse(newurl ?? AppUrl.getClientBookings);
+Future<ClientReports> getReports({String? newurl}) async {
+  Uri url = Uri.parse(newurl ?? AppUrl.getReportList);
   User user = await UserPreferences().getUser();
   String token = user.token!;
 
@@ -42,39 +46,38 @@ Future<ClientBookings> getBookings({String? newurl}) async {
     },
   );
   if (response.statusCode == 200) {
-    return getClientBookingsFromJson(response.body);
+    return clientReportsFromJson(response.body);
   } else {
     throw Exception('Unable to load data');
   }
 }
 
-ClientBookings getClientBookingsFromJson(String str) =>
-    ClientBookings.fromJson(json.decode(str));
+ClientReports clientReportsFromJson(String str) =>
+    ClientReports.fromJson(json.decode(str));
 
-String getClientBookingsToJson(ClientBookings data) =>
-    json.encode(data.toJson());
+String clientReportsToJson(ClientReports data) => json.encode(data.toJson());
 
-class ClientBookings {
-  ClientBookings({
+class ClientReports {
+  ClientReports({
     this.status,
     this.code,
     this.message,
     this.data,
-    this.timestamps,
+    this.timestamp,
   });
 
   bool? status;
   int? code;
   String? message;
   Data? data;
-  int? timestamps;
+  int? timestamp;
 
-  factory ClientBookings.fromJson(Map<String, dynamic> json) => ClientBookings(
+  factory ClientReports.fromJson(Map<String, dynamic> json) => ClientReports(
         status: json["status"],
         code: json["code"],
         message: json["message"],
         data: Data.fromJson(json["data"]),
-        timestamps: json["timestamps"],
+        timestamp: json["timestamp"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -82,13 +85,13 @@ class ClientBookings {
         "code": code,
         "message": message,
         "data": data!.toJson(),
-        "timestamps": timestamps,
+        "timestamp": timestamp,
       };
 }
 
 class Data {
   Data({
-    this.bookings,
+    this.reports,
     this.currentPage,
     this.prevPageUrl,
     this.nextPageUrl,
@@ -98,18 +101,18 @@ class Data {
     this.lastPage,
   });
 
-  List<Booking>? bookings;
+  List<Report>? reports;
   int? currentPage;
-  String? prevPageUrl;
-  String? nextPageUrl;
+  dynamic prevPageUrl;
+  dynamic nextPageUrl;
   String? resultDescription;
   String? pageDescription;
   int? total;
   int? lastPage;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        bookings: List<Booking>.from(
-            json["bookings"].map((x) => Booking.fromJson(x))),
+        reports:
+            List<Report>.from(json["reports"].map((x) => Report.fromJson(x))),
         currentPage: json["current_page"],
         prevPageUrl: json["prev_page_url"],
         nextPageUrl: json["next_page_url"],
@@ -120,7 +123,7 @@ class Data {
       );
 
   Map<String, dynamic> toJson() => {
-        "bookings": List<dynamic>.from(bookings!.map((x) => x.toJson())),
+        "reports": List<dynamic>.from(reports!.map((x) => x.toJson())),
         "current_page": currentPage,
         "prev_page_url": prevPageUrl,
         "next_page_url": nextPageUrl,
@@ -131,34 +134,26 @@ class Data {
       };
 }
 
-class Booking {
-  Booking({
-    this.bookingId,
-    this.bookingNumber,
-    this.serviceFee,
-    this.bookingStatus,
+class Report {
+  Report({
+    this.subject,
+    this.body,
     this.date,
   });
 
-  int? bookingId;
-  String? bookingNumber;
-  String? serviceFee;
-  String? bookingStatus;
+  String? subject;
+  String? body;
   String? date;
 
-  factory Booking.fromJson(Map<String, dynamic> json) => Booking(
-        bookingId: json["booking_id"],
-        bookingNumber: json["booking_number"],
-        serviceFee: json["service_fee"],
-        bookingStatus: json["booking_status"],
+  factory Report.fromJson(Map<String, dynamic> json) => Report(
+        subject: json["subject"],
+        body: json["body"],
         date: json["date"],
       );
 
   Map<String, dynamic> toJson() => {
-        "booking_id": bookingId,
-        "booking_number": bookingNumber,
-        "service_fee": serviceFee,
-        "booking_status": bookingStatus,
+        "subject": subject,
+        "body": body,
         "date": date,
       };
 }
