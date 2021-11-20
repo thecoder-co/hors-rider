@@ -9,6 +9,7 @@ class HistoryCard extends StatelessWidget {
   final int? bookingId;
   final String? status;
   final String? date;
+
   const HistoryCard({
     Key? key,
     @required this.status,
@@ -50,6 +51,7 @@ class HistoryCard extends StatelessWidget {
                     child: Icon(
                       Icons.delivery_dining,
                       size: 50,
+                      color: kPrimaryDarkColor,
                     ),
                   ),
                   Column(
@@ -60,7 +62,7 @@ class HistoryCard extends StatelessWidget {
                         TextSpan(
                           children: [
                             TextSpan(
-                              text: 'Booking id: ',
+                              text: 'Booking number: ',
                               style: GoogleFonts.getFont(
                                 'Overlock',
                                 textStyle: TextStyle(
@@ -70,7 +72,7 @@ class HistoryCard extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: bookingNumber!,
+                              text: bookingNumber,
                               style: GoogleFonts.getFont(
                                 'Overlock',
                                 textStyle: TextStyle(
@@ -101,7 +103,15 @@ class HistoryCard extends StatelessWidget {
                               style: GoogleFonts.getFont(
                                 'Overlock',
                                 textStyle: TextStyle(
-                                  color: Colors.grey[700],
+                                  color: status == 'In review'
+                                      ? Colors.yellow[800]
+                                      : status == 'Approved'
+                                          ? Colors.blue
+                                          : status == 'on delivery'
+                                              ? Colors.blue
+                                              : status == 'Completed'
+                                                  ? Colors.green[700]
+                                                  : Colors.red,
                                 ),
                               ),
                             ),

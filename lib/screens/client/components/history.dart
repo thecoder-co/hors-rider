@@ -30,6 +30,7 @@ class _HistoryState extends State<History> {
           ClientBookings _data = snapshot.data;
           if (snapshot.data.data!.total! != 0) {
             return ListView.builder(
+              controller: ScrollController(),
               itemCount: _data.data!.bookings!.length,
               itemBuilder: (BuildContext context, int index) {
                 return HistoryCard(
@@ -42,7 +43,6 @@ class _HistoryState extends State<History> {
             );
           }
           if (snapshot.hasError) {
-            print(snapshot.error);
           } else {
             return Center(
               child: Column(

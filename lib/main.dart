@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rider/opening_page.dart';
 import 'package:rider/util/shared_preference.dart';
 import 'package:rider/screens/login/login_screen.dart';
 import 'package:rider/screens/signup/signup_screen.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -40,7 +41,7 @@ class _MyAppState extends State<MyApp> {
                     style: GoogleFonts.getFont('Overlock'),
                   );
                 } else if (snapshot.data == false) {
-                  return LoginScreen();
+                  return OpeningPage();
                 }
                 return Client();
             }

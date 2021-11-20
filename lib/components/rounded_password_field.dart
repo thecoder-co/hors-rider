@@ -19,18 +19,6 @@ class _RoundedPasswordFieldState extends State<RoundedPasswordField> {
   bool seen = true;
   @override
   Widget build(BuildContext context) {
-    press() {
-      if (seen == true) {
-        setState(() {
-          seen = false;
-        });
-      } else {
-        setState(() {
-          seen = true;
-        });
-      }
-    }
-
     return TextFieldContainer(
       child: TextField(
         obscureText: seen,

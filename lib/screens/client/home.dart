@@ -2,14 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:rider/constants.dart';
+import 'package:rider/logic/apis/verification_status.dart';
 import 'package:rider/logic/providers/app_bar_provider.dart';
 import 'package:rider/screens/client/components/history.dart';
 import 'package:rider/screens/client/components/profile.dart';
 import 'package:rider/screens/client/components/wallet.dart';
+import 'package:rider/screens/email_otp/otp.dart';
+import 'package:rider/screens/phone_otp/otp.dart';
 
 class Client extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final Future<VerificationStatus> verified = checkVerified();
+    verified.then(
+      (value) async {
+        if (value.data!.phoneVerificationStatus == 0 ||
+            value.data!.emailVerificationStatus == 0) {
+          if (value.data!.phoneVerificationStatus == 0) {
+            Get.offAll(() => OTP());
+          } else {
+            Get.offAll(() => EmailOtp());
+          }
+        }
+      },
+    );
     final AppIndex c = Get.put(AppIndex());
     return Obx(() => Scaffold(
           backgroundColor: Colors.white,
@@ -27,7 +43,7 @@ class Client extends StatelessWidget {
                           style: GoogleFonts.getFont(
                             'Overlock',
                             textStyle: TextStyle(
-                              color: kDarkGreen,
+                              color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -37,7 +53,7 @@ class Client extends StatelessWidget {
                           style: GoogleFonts.getFont(
                             'Overlock',
                             textStyle: TextStyle(
-                              color: kDarkGreen,
+                              color: kPrimaryColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -54,7 +70,7 @@ class Client extends StatelessWidget {
               unselectedLabelStyle: GoogleFonts.getFont(
                 'Overlock',
               ),
-              selectedItemColor: Color.fromRGBO(14, 162, 207, 1),
+              selectedItemColor: kPrimaryColor,
               onTap: (index) {
                 c.changeTabIndex(index);
               },

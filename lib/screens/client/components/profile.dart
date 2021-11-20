@@ -26,6 +26,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
+      controller: ScrollController(),
       child: Center(
         child: Stack(
           alignment: Alignment.topCenter,
@@ -69,6 +70,9 @@ class _ProfileState extends State<Profile> {
                 ),
                 SizedBox(height: 10),
                 ProfileCard(),
+                SizedBox(
+                  height: 30,
+                ),
                 Image.asset(
                   "assets/images/hors_logo.png",
                   height: size.height * 0.29,
